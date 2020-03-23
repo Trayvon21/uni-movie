@@ -1,0 +1,76 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "长江看电影",
+				"h5":{
+					"titleNView":{
+						"type":"transparent"
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录/注册"
+			}
+		},
+		{
+			"path": "pages/search/search",
+			"style": {
+				"navigationBarTitleText": "搜索"
+			}
+		},
+		{
+			"path": "pages/my/my",
+			"style": {
+				"navigationBarTitleText": "我的"
+			}
+		},
+		{
+			"path": "pages/user/user",
+			"style": {
+				"navigationBarTitleText": "用户信息"
+			}
+		},
+		{
+			"path": "pages/detail/detail",
+			"style": {
+				"navigationBarTitleText": "电影详情"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "长江看电影",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar": {
+		"color": "#666666",
+		"selectedColor": "#b62e1a",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"list": [{
+				"pagePath": "pages/index/index",
+				"iconPath": "static/imgs/index.png",
+				"selectedIconPath": "static/imgs/index-active.png",
+				"text": "首页"
+			},
+			{
+				"pagePath": "pages/search/search",
+				"iconPath": "static/imgs/search.png",
+				"selectedIconPath": "static/imgs/search-active.png",
+				"text": "搜索"
+			},
+			{
+				"pagePath": "pages/my/my",
+				"iconPath": "static/imgs/my.png",
+				"selectedIconPath": "static/imgs/my-active.png",
+				"text": "我的"
+			}
+		]
+	}
+}
