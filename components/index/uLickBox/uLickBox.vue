@@ -4,14 +4,14 @@
 		<view class="ulick-info">
 			<view class="ulick-name txt-hidden">{{item.name}}</view>
 			<view class="ulick-star">
-				<uni-rate size='10' :value="parseInt(item.score/2)" />
+				<uni-rate disabled size='10' :value="parseInt(item.score/2)" />
 			</view>
 			<view class="ulick-des">{{item.basicInfo}}</view>
 			<view class="ulick-des">{{item.releaseDate}}</view>
 		</view>
 		<view class="ulick-control a-center flex">
 			<view class="">
-				<view class="">
+				<view class="" @click.stop="clickUp">
 					<uni-icons color="#f6ac2d" type="hand-thumbsup" size="20"></uni-icons>
 				</view>
 				<view class="">
@@ -40,18 +40,29 @@
 		components: {
 			uniRate,
 			uniIcons
+		},
+		methods:{
+			clickUp(){
+				uni.showToast({
+					icon:"success",
+					title:"操作成功",
+					duration:1000
+				})
+			}
 		}
 	}
 </script>
 
 <style lang="scss">
 	.ulick-container {
-		margin: 32upx 0;
+		margin: 60upx 0;
 	}
 
 	.ulick-pic {
 		height: 240upx;
 		width: 180upx;
+		border-radius: 10upx;
+		overflow: hidden;
 	}
 
 	.ulick-name {
@@ -74,6 +85,8 @@
 	}
 
 	.ulick-control {
+		border-left: 5upx dashed #dbdbda;
+		padding-left: 20upx;
 		text-align: center;
 		color: #f6ac2d;
 	}

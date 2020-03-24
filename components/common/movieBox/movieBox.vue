@@ -7,7 +7,7 @@
 			{{item.name}}
 		</view>
 		<view class="box-rate flex a-center">
-			<uni-rate size='10' :value="parseInt(item.score/2)" />
+			<uni-rate size='10' disabled :value="parseInt(item.score/2)" />
 			<view class="">
 				{{item.score}}
 			</view>
