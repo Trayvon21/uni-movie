@@ -69,7 +69,6 @@
 					success: (res) => {
 						this.resultList = res.data.data.rows
 						this.records = res.data.data.records
-						console.log(res);
 					},
 					fail() {},
 					complete() {

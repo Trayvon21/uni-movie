@@ -47,11 +47,6 @@
 			uLickBox
 		},
 		onLoad() {
-			uni.getSystemInfo({
-				success(res) {
-					console.log(res);
-				}
-			})
 			this.getCarouse();
 			this.getUlick();
 			this.getHotList('trailer');
@@ -132,7 +127,6 @@
 				this.videoContext = uni.createVideoContext(id)
 			},
 			gotoDetail(id) {
-				console.log(1);
 				uni.navigateTo({
 					url: `/pages/detail/detail?id=${id}`
 				})

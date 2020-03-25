@@ -2,8 +2,7 @@
 	<view class="login-container flex a-center jc-around">
 		<view class="">
 			<view>
-				<image class="login-pic" src="https://avatars0.githubusercontent.com/u/57336267?s=460&u=d9836824b273cfc72214fdc353ee0f3bf5acc0fb&v=4"
-				 mode="" />
+				<image class="login-pic" src="../../static/imgs/icon.jpg" mode="" />
 			</view>
 			<view class="flex input-box">
 				账号:
@@ -56,7 +55,6 @@
 					},
 					method: 'POST',
 					success: (res) => {
-						console.log(res.data.data);
 						if (res.data.status === 200) {
 							uni.setStorageSync('user', JSON.stringify(res.data.data))
 							uni.showToast({
@@ -70,7 +68,6 @@
 								})
 							}, 500)
 						} else {
-							console.log(res);
 							uni.showToast({
 								title: `${res.data.msg}`,
 								duration: 500,
@@ -90,7 +87,6 @@
 			// #ifdef APP-PLUS
 			appUnionLogin(type) {
 				const that = this
-				console.log(type);
 				uni.login({
 					provider: type,
 					success: (res) => {
@@ -103,7 +99,6 @@
 								let nickname = ''
 								let openIdOrUid = ''
 								if (type === 'weixin') {
-									console.log(userInfo);
 									face = userInfo.avatarUrl
 									nickname = userInfo.nickName
 									openIdOrUid = userInfo.openId
@@ -151,27 +146,12 @@
 				})
 			},
 			// #endif
-
-
 		},
-		mounted() {
-
+		onUnload() {
+			uni.switchTab({
+				url: '/pages/my/my'
+			})
 		},
-		onLoad() {
-
-		},
-		filters: {
-
-		},
-		computed: {
-
-		},
-		watch: {
-
-		},
-		directives: {
-
-		}
 	}
 </script>
 

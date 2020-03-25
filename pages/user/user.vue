@@ -5,7 +5,7 @@
 				<view class="">
 					头像
 				</view>
-				<view class="flex a-center">
+				<view class="flex a-center" @click="openPopup">
 					<image class="user-pic" :src="user.faceImage" mode="" />
 					<uni-icons type="forward" color="#ededed" size="30"></uni-icons>
 				</view>
@@ -14,7 +14,7 @@
 				<view class="">
 					昵称
 				</view>
-				<view class="flex a-center">
+				<view class="flex a-center" @click="gotoChange('changeNickname')">
 					<view>{{user.nickname}}</view>
 					<uni-icons type="forward" color="#ededed" size="30"></uni-icons>
 				</view>
@@ -23,7 +23,7 @@
 				<view class="">
 					生日
 				</view>
-				<view class="flex a-center">
+				<view class="flex a-center" @click="gotoChange('changeBirth')">
 					<view>{{user.birthday}}</view>
 					<uni-icons type="forward" color="#ededed" size="30"></uni-icons>
 				</view>
@@ -32,26 +32,34 @@
 				<view class="">
 					性别
 				</view>
-				<view class="flex a-center">
+				<view class="flex a-center" @click="gotoChange('changeSex')">
 					<view>{{user.sex===1?'男':user.sex===0?'女':'保密'}}</view>
 					<uni-icons type="forward" color="#ededed" size="30"></uni-icons>
 				</view>
 			</view>
 		</view>
-
+		<uni-popup ref="popup" type="bottom">
+			<view style="background-color: #FFFFFF;">
+				<button type="default" @click="$gotoView(user.faceImage)">查看我的头像</button>
+				<button type="default" @click="gotoChange('changePic')">从手机相册中选择</button>
+				<button type="default" @click="closePopup">取消</button>
+			</view>
+		</uni-popup>
 		<view class="user-button">
-			<button type="default">清理缓存</button>
+			<button type="default" @click="clear">清理缓存</button>
 			<button type="default" @click="exit">退出登录</button>
 		</view>
 	</view>
 </template>
 
 <script>
+	import uniPopup from "../../components/uni-ui/uni-popup/uni-popup.vue"
 	import uniIcons from '../../components/uni-ui/uni-icons/uni-icons.vue'
 	export default {
 		name: "",
 		components: {
-			uniIcons
+			uniIcons,
+			uniPopup
 		},
 		props: {},
 		data() {
@@ -60,6 +68,38 @@
 			}
 		},
 		methods: {
+			openPopup() {
+				this.$refs.popup.open()
+			},
+			closePopup() {
+				this.$refs.popup.close()
+			},
+			gotoChange(url) {
+				this.closePopup()
+				uni.navigateTo({
+					url: `/pages/${url}/${url}`
+				})
+			},
+			clear() {
+				if (uni.getStorageSync('user')) {
+					this.user = JSON.parse(uni.getStorageSync('user'))
+					uni.showToast({
+						title: "缓存清理成功",
+						duration: 800
+					})
+				} else {
+					this.user = null
+					uni.showToast({
+						title: "您的登陆状态失效",
+						duration: 800
+					})
+					setTimeout(() => {
+						uni.navigateTo({
+							url: "/pages/login/login"
+						})
+					}, 800)
+				}
+			},
 			exit() {
 				uni.showLoading({
 					title: "加载中..."
@@ -83,7 +123,7 @@
 							setTimeout(() => {
 								uni.removeStorageSync('user')
 								uni.switchTab({
-									url: "../index/index"
+									url: "../my/my"
 								})
 							}, 800)
 						} else {
@@ -104,10 +144,25 @@
 		mounted() {
 
 		},
-		onLoad() {
+		onUnload() {
+			uni.switchTab({
+				url: '/pages/my/my'
+			})
+		},
+		onShow() {
 			if (uni.getStorageSync('user')) {
 				this.user = JSON.parse(uni.getStorageSync('user'))
-				console.log(uni.getStorageSync('user'));
+			} else {
+				this.user = null
+				uni.showToast({
+					title: "你未登陆",
+					duration: 800
+				})
+				setTimeout(() => {
+					uni.navigateTo({
+						url: "/pages/login/login"
+					})
+				}, 800)
 			}
 		},
 		filters: {
