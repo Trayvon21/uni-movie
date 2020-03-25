@@ -7,7 +7,9 @@
 			</swiper-item>
 		</swiper>
 		<!-- 热门超英 -->
-		<view class="">热门超英</view>
+		<view class="index-title flex a-center">
+			<image class="index-icon" src="../../static/imgs/hot.png" mode="" />
+			热门超英</view>
 		<scroll-view scroll-x v-if="hotList" class="">
 			<view class="flex flex-nowrap">
 				<view v-for="item in hotList" :key="item.id" @click="gotoDetail(item.id)">
@@ -15,16 +17,21 @@
 				</view>
 			</view>
 		</scroll-view>
-		<view class="">热门预告</view>
+		<view class="index-title flex a-center">
+			<image class="index-icon" src="../../static/imgs/tags.png" mode="" />热门预告</view>
 		<view class="flex flex-wrap jc-around">
 			<view v-for="item in trailerList" :key="item.id" class="player-container">
 				<video class="player-video" :id="item.id" :src="item.trailer" :poster="item.poster" @play="clickVideo(item.id)" />
 			</view>
 		</view>
-		<view class="">猜你喜欢</view>
-		<view v-for="item in UlickList" :key="item.id" @click="gotoDetail(item.id)">
-			<uLickBox :item="item"></uLickBox>
+		<view class="index-title flex a-center">
+			<image class="index-icon" src="../../static/imgs/recommend.png" mode="" />猜你喜欢</view>
+		<view class="" v-if="UlickList">
+			<view v-for="item in UlickList" :key="item.id" @click="gotoDetail(item.id)">
+				<uLickBox :item="item"></uLickBox>
+			</view>
 		</view>
+
 	</view>
 </template>
 
@@ -54,7 +61,6 @@
 		},
 		onPullDownRefresh() {
 			this.flag = false
-
 			this.getCarouse();
 			this.getUlick();
 			this.getHotList('trailer');
@@ -83,6 +89,7 @@
 				})
 			},
 			getUlick() {
+				this.UlickList = null
 				uni.showLoading({
 					title: "加载中..."
 				})
@@ -151,6 +158,17 @@
 		height: 300upx;
 		background-color: black;
 		margin-bottom: 20upx;
+	}
+
+	.index-title {
+		margin: 10upx;
+		font-size: 28upx;
+	}
+
+	.index-icon {
+		width: 40upx;
+		height: 40upx;
+		padding: 10upx;
 	}
 
 	.player-video {

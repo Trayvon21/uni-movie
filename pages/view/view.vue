@@ -1,10 +1,17 @@
 <template>
 	<view class="view-container flex a-center">
-		<image @longtap="save(url)" class="view-pic" :src="url" mode="widthFix"></image>
+		<image @longtap="openPopup" class="view-pic" :src="url" mode="widthFix"></image>
+		<uni-popup ref="popup" type="bottom">
+			<view style="background-color: #FFFFFF;">
+				<button type="default" @click="save()">保存图片到本地</button>
+				<button type="default" @click="closePopup">取消</button>
+			</view>
+		</uni-popup>
 	</view>
 </template>
 
 <script>
+	import uniPopup from "../../components/uni-ui/uni-popup/uni-popup.vue"
 	export default {
 		data() {
 			return {
@@ -12,36 +19,40 @@
 			};
 		},
 		onLoad(options) {
+			console.log(options.url);
 			this.url = options.url
 		},
+		components: {
+			uniPopup
+		},
 		methods: {
-			save(url) {
-				uni.showModal({
-					title: '是否保存',
-					content: '点击确认保存本照片',
-					success: function(res) {
-						if (res.confirm) {
-							uni.downloadFile({
-								url: url, //仅为示例，并非真实的资源
-								success: (res) => {
-									if (res.statusCode === 200) {
-										uni.saveImageToPhotosAlbum({
-											filePath: res.tempFilePath,
-											success: function() {
-												uni.showToast({
-													icon: "success",
-													title: "保存成功",
-													duration: 800
-												})
-											}
-										});
-									}
+			openPopup() {
+				// #ifdef APP-PLUS || MP-WEIXIN
+				this.$refs.popup.open()
+				// #endif
+			},
+			closePopup() {
+				this.$refs.popup.close()
+			},
+			save() {
+				this.closePopup()
+				uni.downloadFile({
+					url: this.url, //仅为示例，并非真实的资源
+					success: (res) => {
+						if (res.statusCode === 200) {
+							uni.saveImageToPhotosAlbum({
+								filePath: res.tempFilePath,
+								success: () => {
+									uni.showToast({
+										icon: "success",
+										title: "保存成功",
+										duration: 800
+									})
 								}
-							})
-						} else if (res.cancel) {
+							});
 						}
 					}
-				});
+				})
 			}
 		},
 	}
