@@ -42,28 +42,12 @@
 				})
 			}
 		},
-		mounted() {
-
-		},
-		onLoad() {},
 		onShow() {
 			if (uni.getStorageSync('user')) {
 				this.user = JSON.parse(uni.getStorageSync('user'))
 			} else {
 				this.user = null
 			}
-		},
-		filters: {
-
-		},
-		computed: {
-
-		},
-		watch: {
-
-		},
-		directives: {
-
 		}
 	}
 </script>

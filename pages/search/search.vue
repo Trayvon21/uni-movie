@@ -52,28 +52,13 @@
 				this.getData('')
 			},
 			getData(keywords) {
-				uni.showLoading({
-					title: "加载中..."
-				})
-				uni.request({
-					url: this.$api("/search/list"),
-					method: 'POST',
-					data: {
-						keywords,
-						page: this.page,
-						pageSize: 50
-					},
-					header: {
-						'Content-Type': 'application/x-www-form-urlencoded'
-					},
-					success: (res) => {
-						this.resultList = res.data.data.rows
-						this.records = res.data.data.records
-					},
-					fail() {},
-					complete() {
-						uni.hideLoading()
-					}
+				this.$api.search({
+					keywords: keywords,
+					page: this.page,
+					pageSize: 50
+				}).then(res => {
+					this.resultList = res.data.data.rows
+					this.records = res.data.data.records
 				})
 			},
 			gotoDetail(id) {
@@ -98,9 +83,7 @@
 					that.windowHeight = res.windowHeight - res.statusBarHeight - 52
 				}
 			})
-
 			this.getData('')
-
 		},
 		filters: {
 

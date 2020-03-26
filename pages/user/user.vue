@@ -101,48 +101,28 @@
 				}
 			},
 			exit() {
-				uni.showLoading({
-					title: "加载中..."
-				})
-				uni.request({
-					url: this.$api("/user/logout"),
-					data: {
-						userId: this.user.id
-					},
-					header: {
-						'Content-Type': 'application/x-www-form-urlencoded'
-					},
-					method: 'POST',
-					success: (res) => {
-
-						if (res.data.status === 200) {
-							uni.showToast({
-								title: res.data.msg,
-								duration: 800
+				this.$api.logout({
+					userId: this.user.id
+				}).then(res => {
+					if (res.data.status === 200) {
+						uni.showToast({
+							title: res.data.msg,
+							duration: 800
+						})
+						setTimeout(() => {
+							uni.removeStorageSync('user')
+							uni.switchTab({
+								url: "../my/my"
 							})
-							setTimeout(() => {
-								uni.removeStorageSync('user')
-								uni.switchTab({
-									url: "../my/my"
-								})
-							}, 800)
-						} else {
-							uni.showToast({
-								title: res.data.msg,
-								duration: 800
-							})
-						}
-					},
-					fail() {},
-					complete() {
-						uni.hideLoading()
+						}, 800)
+					} else {
+						uni.showToast({
+							title: res.data.msg,
+							duration: 800
+						})
 					}
 				})
-
 			}
-		},
-		mounted() {
-
 		},
 		onUnload() {
 			uni.switchTab({
@@ -164,18 +144,6 @@
 					})
 				}, 800)
 			}
-		},
-		filters: {
-
-		},
-		computed: {
-
-		},
-		watch: {
-
-		},
-		directives: {
-
 		}
 	}
 </script>

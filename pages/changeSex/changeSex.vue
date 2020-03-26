@@ -3,10 +3,10 @@
 		<radio-group class="" @change="changeSex">
 			<label class="flex jc-around sex-radio">
 				<view>
-					<radio value="1" :checked="user.sex===1" /><text>男</text>
+					<radio value="1" :checked="sex===1" /><text>男</text>
 				</view>
 				<view>
-					<radio value="0" :checked="user.sex===0" /><text>女</text>
+					<radio value="0" :checked="sex===0" /><text>女</text>
 				</view>
 			</label>
 		</radio-group>
@@ -18,67 +18,52 @@
 	export default {
 		data() {
 			return {
-				user: null
+				user: null,
+				sex: null
 			};
 		},
 		onLoad() {
 			this.user = JSON.parse(uni.getStorageSync('user'))
+			this.sex = this.user.sex
 		},
 		methods: {
 			changeSex(e) {
 				this.user.sex = e.detail.value
-				console.log(e);
 			},
 			updateSex() {
-				uni.showLoading({
-					title: "加载中..."
-				})
-				uni.request({
-					url: this.$api("/user/modifyUserinfo"),
-					method: 'POST',
-					header: {
-						"headerUserId": this.user.id,
-						"headerUserToken": this.user.userUniqueToken
-					},
-					data: {
-						userId: this.user.id,
-						sex: this.user.sex //trailer
-					},
-					success: (res) => {
-						if (res.data.status === 200) {
-							uni.showToast({
-								title: "修改成功",
-								duration: 800
+				this.$api.changeUserInfo({
+					userId: this.user.id,
+					sex: this.user.sex
+				}).then(res => {
+					if (res.data.status === 200) {
+						uni.showToast({
+							title: "修改成功",
+							duration: 800
+						})
+						setTimeout(() => {
+							uni.setStorageSync('user', JSON.stringify(res.data.data))
+							uni.navigateTo({
+								url: "/pages/user/user"
 							})
-							setTimeout(() => {
-								uni.setStorageSync('user', JSON.stringify(res.data.data))
-								uni.navigateTo({
-									url: "/pages/user/user"
-								})
-							}, 800)
-						} else if (res.data.status === 502) {
-							uni.showToast({
-								icon: "none",
-								title: res.data.msg,
-								duration: 800
+						}, 800)
+					} else if (res.data.status === 502) {
+						uni.showToast({
+							icon: "none",
+							title: res.data.msg,
+							duration: 800
+						})
+						uni.removeStorageSync('user')
+						setTimeout(() => {
+							uni.navigateTo({
+								url: "/pages/login/login"
 							})
-							uni.removeStorageSync('user')
-							setTimeout(() => {
-								uni.navigateTo({
-									url: "/pages/login/login"
-								})
-							}, 800)
-						} else {
-							uni.showToast({
-								icon: "none",
-								title: res.data.msg,
-								duration: 800
-							})
-						}
-					},
-					fail() {},
-					complete() {
-						uni.hideLoading()
+						}, 800)
+					} else {
+						uni.showToast({
+							icon: "none",
+							title: res.data.msg,
+							duration: 800
+						})
 					}
 				})
 			}

@@ -61,10 +61,7 @@
 		},
 		onPullDownRefresh() {
 			this.flag = false
-			this.getCarouse();
 			this.getUlick();
-			this.getHotList('trailer');
-			this.getHotList('superhero');
 			setTimeout(() => {
 				this.flag = true
 				uni.stopPullDownRefresh()
@@ -73,57 +70,25 @@
 		},
 		methods: {
 			getCarouse() {
-				uni.showLoading({
-					title: "加载中..."
-				})
-				uni.request({
-					url: this.$api("index/carousel/list"),
-					method: 'POST',
-					success: (res) => {
+				this.$api.getCarouse().then(res => {
+					if (res.data.status === 200) {
 						this.carouselList = res.data.data
-					},
-					fail() {},
-					complete() {
-						uni.hideLoading()
 					}
 				})
 			},
 			getUlick() {
-				this.UlickList = null
-				uni.showLoading({
-					title: "加载中..."
-				})
-				uni.request({
-					url: this.$api("index/guessULike"),
-					method: 'POST',
-					success: (res) => {
+				this.$api.getUlick().then(res => {
+					if (res.data.status === 200) {
 						this.UlickList = res.data.data
-					},
-					fail() {},
-					complete() {
-						uni.hideLoading()
 					}
 				})
 			},
 			getHotList(type) {
-				uni.showLoading({
-					title: "加载中..."
-				})
-				uni.request({
-					url: this.$api("index/movie/hot"),
-					method: 'POST',
-					header: {
-						'Content-Type': 'application/x-www-form-urlencoded'
-					},
-					data: {
-						type //trailer
-					},
-					success: (res) => {
+				this.$api.getHotList({
+					type: type
+				}).then(res => {
+					if (res.data.status === 200) {
 						type === 'trailer' ? this.trailerList = res.data.data : this.hotList = res.data.data
-					},
-					fail() {},
-					complete() {
-						uni.hideLoading()
 					}
 				})
 			},

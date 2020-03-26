@@ -86,37 +86,15 @@
 		},
 		methods: {
 			getData(id) {
-				uni.showLoading({
-					title: "加载中..."
-				})
-				uni.request({
-					url: this.$api(`/search/trailer/${id}/`),
-					method: 'POST',
-					success: (res) => {
-						this.details = res.data.data
-						this.score = res.data.data.score
-						this.plotPics = JSON.parse(res.data.data.plotPics)
-					},
-					fail() {},
-					complete() {
-						uni.hideLoading()
-					}
+				this.$api.getDetail(id).then(res => {
+					this.details = res.data.data
+					this.score = res.data.data.score
+					this.plotPics = JSON.parse(res.data.data.plotPics)
 				})
 			},
 			getCast(id, role) {
-				uni.showLoading({
-					title: "加载中..."
-				})
-				uni.request({
-					url: this.$api(`/search/staff/${id}/${role}`),
-					method: 'POST',
-					success: (res) => {
-						role === 1 ? this.directors = res.data.data : this.actors = res.data.data
-					},
-					fail() {},
-					complete() {
-						uni.hideLoading()
-					}
+				this.$api.getCast(id, role).then(res => {
+					role === 1 ? this.directors = res.data.data : this.actors = res.data.data
 				})
 			}
 		},
@@ -124,7 +102,6 @@
 
 		},
 		onLoad(options) {
-			// options.id = 'marvel-1011'
 			this.getData(options.id)
 			this.getCast(options.id, 1)
 			this.getCast(options.id, 2)

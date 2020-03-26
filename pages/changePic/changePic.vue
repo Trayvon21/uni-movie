@@ -57,8 +57,9 @@
 				uni.showLoading({
 					title: "加载中..."
 				})
+				
 				uni.uploadFile({
-					url: `${this.$api('/user/uploadFace')}&userId=${this.user.id}`, //仅为示例，非真实的接口地址
+					url: `https://www.imovietrailer.com/superhero/user/uploadFace?qq=2684425594&userId=${this.user.id}`, //仅为示例，非真实的接口地址
 					filePath: this.picUrl.tempFiles[0].path,
 					name: 'file',
 					header: {

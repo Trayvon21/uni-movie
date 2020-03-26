@@ -44,46 +44,32 @@
 		},
 		methods: {
 			login() {
-				uni.showLoading({
-					title: "加载中..."
-				})
-				uni.request({
-					url: this.$api("/user/registOrLogin"),
-					data: {
-						username: this.username,
-						password: this.password
-					},
-					method: 'POST',
-					success: (res) => {
-						if (res.data.status === 200) {
-							uni.setStorageSync('user', JSON.stringify(res.data.data))
-							uni.showToast({
-								title: '登录成功',
-								duration: 500,
-								icon: "success"
+				this.$api.login({
+					username: this.username,
+					password: this.password
+				}).then(res => {
+					if (res.data.status === 200) {
+						uni.setStorageSync('user', JSON.stringify(res.data.data))
+						uni.showToast({
+							title: '登录成功',
+							duration: 500,
+							icon: "success"
+						})
+						setTimeout(() => {
+							uni.navigateTo({
+								url: "/pages/user/user"
 							})
-							setTimeout(() => {
-								uni.navigateTo({
-									url: "/pages/user/user"
-								})
-							}, 500)
-						} else {
-							uni.showToast({
-								title: `${res.data.msg}`,
-								duration: 500,
-								icon: "none"
-							})
-						}
-
-					},
-					fail() {
-
-					},
-					complete() {
-						uni.hideLoading()
+						}, 500)
+					} else {
+						uni.showToast({
+							title: `${res.data.msg}`,
+							duration: 500,
+							icon: "none"
+						})
 					}
 				})
 			},
+
 			// #ifdef APP-PLUS
 			appUnionLogin(type) {
 				const that = this
@@ -114,31 +100,22 @@
 								uni.showLoading({
 									title: "加载中..."
 								})
-								uni.request({
-									url: this.$api(`/appUnionLogin/${type}`),
-									data: {
-										face,
-										nickname,
-										openIdOrUid
-									},
-									method: 'POST',
-									success: (res) => {
-										uni.setStorageSync('user', JSON.stringify(res.data.data))
-										uni.showToast({
-											title: '登录成功',
-											duration: 500,
-											icon: "success"
+								this.$api.appUnionLogin(type, {
+									face,
+									nickname,
+									openIdOrUid
+								}).then(res => {
+									uni.setStorageSync('user', JSON.stringify(res.data.data))
+									uni.showToast({
+										title: '登录成功',
+										duration: 500,
+										icon: "success"
+									})
+									setTimeout(() => {
+										uni.navigateTo({
+											url: "/pages/user/user"
 										})
-										setTimeout(() => {
-											uni.navigateTo({
-												url: "/pages/user/user"
-											})
-										}, 500)
-									},
-									fail() {},
-									complete() {
-										uni.hideLoading()
-									}
+									}, 500)
 								})
 							}
 						})
